@@ -62,6 +62,7 @@ void* func(void *p){
     aloca_recurso(1);
     printf("\n Thread %d , peguei 1 recurso, total %d.....\n", thread, RECURSO_MAXIMO);
   }
+  desaloca_recurso(3);
   ///////////////////////
 
   //EnableInterrupts();
