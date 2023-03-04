@@ -53,19 +53,19 @@ void* func(void *p){
   printf("\n Thread %d comecou.....\n", thread);
 
   lock_t MUTEX;
-  init(MUTEX);
-  lock(MUTEX);
+  init(&MUTEX);
+  lock(&MUTEX);
 
+  printf("\n Thread %d , recurso %d.....\n", thread, RECURSO_MAXIMO);
   //CRITICAL REGION
   for (; i<3; i++){
     aloca_recurso(1);
-    sleep(2);
-    printf("\n Thread %d , recurso %d.....\n", thread, RECURSO_MAXIMO);
+    printf("\n Thread %d , peguei 1 recurso, total %d.....\n", thread, RECURSO_MAXIMO);
   }
   ///////////////////////
 
   //EnableInterrupts();
-  unlock(MUTEX);
+  unlock(&MUTEX);
   printf("\n Thread %d saindo da Critical Section.....\n", thread);
 
 }
