@@ -14,17 +14,28 @@ int valor1 = 500;
 void handler(int sig){ // can be called asynchronously
   printf("\n Digite 'X' para confirmar terminar o processo!\n");
   
-  char a;
-  scanf ("%c", &a);
-  
-  if(a == 'X'){
-    printf("sim");
+  char input;
+  scanf("%s", &input);
+
+  if (input == 'X' || input == 'x'){
+    printf("Terminando processo");
+
+    printf(" O valor1 = %d\n",valor1);
+    file1Open = false; 
+    file2Open = false;
+    exit(-1);
   }
-  else{
-    printf("nao");
-  }
+  else return;
 }
 
+void handlerKill(int sig){ // can be called asynchronously
+  printf("Fechando arquivos. O status do file1Open eh %d e o file2Open eh %d \n", file1Open, file2Open);
+  printf(" O valor1 = %d\n",valor1);
+
+  file1Open = false; 
+  file2Open = false;
+  exit(-1);
+}
 
 int main(){
   pid_t pid;
@@ -33,12 +44,14 @@ int main(){
   if (!pid){
     printf( "Sou o FILHO. %d\n", getpid() );
     signal(SIGINT, handler);
+    signal(SIGTERM, handlerKill);
     return 0;
   }
   else if (pid){
     printf( "Sou o PAI. %d\n", getpid() );
     valor1 /= 20;
     signal(SIGINT, handler);
+    signal(SIGTERM, handlerKill);
 
     wait(NULL);
     while (1);
@@ -48,6 +61,5 @@ int main(){
 
     return 0;
   }
-  
   
 }
