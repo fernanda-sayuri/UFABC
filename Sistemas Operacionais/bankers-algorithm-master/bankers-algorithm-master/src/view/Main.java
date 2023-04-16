@@ -1,8 +1,11 @@
 package view;
 
+import java.util.Random;
+
 import controller.DeadlockAlgorithm;
 
 public class Main {
+	
 	
 	public static void main(String[] args) {
 		
@@ -26,8 +29,6 @@ public class Main {
 													};
 
 		int[] recursosExistentes = {6, 3, 4, 2};
-		
-		//
 		
 		int qtdProcessos1 = 5;
 		int qtdRecursos1 = 6;
@@ -55,6 +56,34 @@ public class Main {
 		
 		DeadlockAlgorithm deadlock1 = new DeadlockAlgorithm(qtdProcessos1, qtdRecursos1, recursosAlocados1, recursosNecessarios1, recursosExistentes1);
 		deadlock1.realizarAnalise();
+		
+		new Thread() {
+	        @Override
+	        public void run() {
+	        	int novosProcessos = 0;
+	        	Random random = new Random();
+	        	while(novosProcessos<=6) {
+	        		try {
+		                this.sleep(15000);
+		            } catch (InterruptedException e) {
+		                e.printStackTrace();
+		            }
+		            
+       			System.out.println("\nNovo processo adicionado!");
+		            
+		            for (int x = 0; x < qtdRecursos1 -2; x++) {
+		            	int posCol = random.nextInt(2);
+		            	recursosAlocados[posCol][x] =  random.nextInt(3);
+		            	recursosNecessarios[posCol][x] =  random.nextInt(3);
+		            }
+		            
+		            novosProcessos++;
+		            
+		            DeadlockAlgorithm deadlock1 = new DeadlockAlgorithm(qtdProcessos1, qtdRecursos1, recursosAlocados1, recursosNecessarios1, recursosExistentes1);
+		    		deadlock1.realizarAnalise();
+	        	}
+	        }
+	    }.start();
 		
 	}
 
