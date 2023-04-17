@@ -35,30 +35,17 @@ public class DeadlockAlgorithm {
 	}
 
 	private void populaDados() {
-		//definindo valor padrao pros vetores responsaveis pelos processos
+		//valor nos vetores
 		for(int i = 0; i < totalDeProcessos; i++){
 			vezesExecutadasDoProcesso[i] = 0;
 			processoServido[i] = false;
 			impasse[i] = false;
 		}
 		
-		//definindo valor padrao pros vetores responsaveis pelos recursos
 		for(int i = 0; i < totalDeRecursos; i++){
 			recursosDisponiveis[i] = 0;
 			somatoriaRecursosAlocados[i] = 0;
 		}
-	}
-	
-	public static void setTimeout(Runnable runnable, int delay){
-	    new Thread(() -> {
-	        try {
-	            Thread.sleep(delay);
-	            runnable.run();
-	        }
-	        catch (Exception e){
-	            System.err.println(e);
-	        }
-	    }).start();
 	}
 	
 	private int[] calcularRecursosEmUso(int[][] recursosAlocados){
@@ -68,7 +55,6 @@ public class DeadlockAlgorithm {
 				somatoriaRecursosAlocados[recurso] += recursosAlocados[processo][recurso];
 			}
 		}
-		
 		return somatoriaRecursosAlocados;
 	}
 	
@@ -81,7 +67,7 @@ public class DeadlockAlgorithm {
 		
 		for(int recurso = 0; recurso < totalDeRecursos; recurso++)
 			recursosExistentes[recurso] += recursosDisponiveis[recurso];
-		
+
 		return recursosExistentes;
 	}
 	
@@ -101,27 +87,22 @@ public class DeadlockAlgorithm {
 	}
 	
 	private boolean deadlock(){
-		
-		//se processou mais do que o total de processos e ainda
-		//assim nao conseguiu finalizar, deu deadlock
+		//caso tenha analisado todos os processos e não achou recursos pra suprir
 		for(int processo = 0; processo < totalDeProcessos; processo++)
 			if(vezesExecutadasDoProcesso[processo] >= totalDeProcessos){
-				System.out.println("\nDEADLOCK, motivo: algum processo rodou mais do que o necessário e ainda não conseguiu\nser executado, ou seja, jamais haverão recursos suficientes para ele executar.");
+				System.out.println("\nDEADLOCK: Não existem recursos suficientes para ele executar os processos.");
 				return true;
 			}
 				
-		
-		//conferindo se conseguiu rodar algum processo
 		for(int processo = 0; processo < totalDeProcessos; processo++)
 			if(!impasse[processo])
 				return false;
 		
-		System.out.println("\nDEADLOCK, motivo: nenhum processo pode ser executado.");
+		System.out.println("\nDEADLOCK: nenhum processo pode ser executado.");
 		return true;
 	}
 	
 	private int[] calcularRecursosDisponiveis(int[] recursosExistentes, int[] somatoriaRecursosAlocados){
-		
 		for(int recurso = 0; recurso < totalDeRecursos; recurso++)
 			recursosDisponiveis[recurso] = recursosExistentes[recurso] - somatoriaRecursosAlocados[recurso];
 	
@@ -152,8 +133,7 @@ public class DeadlockAlgorithm {
 	}
 	
 	private void usarRecurso(int processo){
-		System.out.println("Processo[" + processo + "] ests usando recurso.");
-		
+		System.out.println("Processo[" + processo + "] usando recurso.");
 		int[][] recursosAlocadosAntesDaSoma = criarCopiaDaMatriz(recursosAlocados);
 		
 		for(int recurso = 0; recurso < totalDeRecursos; recurso++){
@@ -161,40 +141,33 @@ public class DeadlockAlgorithm {
 			//se tem recursos pra emprestar
 			if(recursosDisponiveis[recurso] > 0){
 				
-				//recursos disponiveis estao sendo emprestados aos processos
+				//emprestar recursos disponiveis
 				recursosAlocados[processo][recurso] += recursosDisponiveis[recurso];
 				
-				//recursos disponiveis diminuiram
+				//tirar recursos que foram emprestados
 				recursosDisponiveis[recurso] -= recursosAlocadosAntesDaSoma[processo][recurso];
 			}
-			
 		}
 	}
 	
 	private void devolverRecurso(int processo){
 		for(int recurso = 0; recurso < totalDeRecursos; recurso++){
 			
-			//recursos antes usados agora serao
-			//devolvidos para os recursos disponiveis
+			//devolvendo recursos usados como disponiveis
 			recursosDisponiveis[recurso] = recursosAlocados[processo][recurso];
 
-			//zerando a quantidade de recursos
-			//que aquele processo precisa
 			recursosAlocados[processo][recurso] = 0;
 			recursosNecessarios[processo][recurso] = 0;
 			
 		}
 		processoServido[processo] = true;
-		System.out.println("Processo[" + processo + "] devolveu o recurso. Ficou em " + (posicaoDoProcesso+1) + "o lugar.");
+		System.out.println("Processo[" + processo + "] devolveu recurso");
 		posicaoDoProcesso++;
 		
 		System.out.println("\n--------------------------------------------------------------");
-		System.out.println("Exibindo recursos disponiveis apas o processo devolver recurso:");
-		mostrarVetorDe("Rec. disponiveis", recursosDisponiveis);
+		System.out.println("Show recursos disponiveis apos o processo devolver recurso:");
+		mostrarVetorDe("Recursos disponiveis", recursosDisponiveis);
 		
-		//serviu o processo, esque�a os antigos
-		//impasses e tente novamente, talvez tenha
-		//conseguido novos recursos.
 		resetarImpasses();
 	}
 	
@@ -217,7 +190,7 @@ public class DeadlockAlgorithm {
 				
 				if(recursosDisponiveis[recurso] < recursosNecessarios[processo][recurso]){
 					impasse[processo] = true;
-					System.out.println("Nao tem recurso o suficiente pra suprir. Processo[" + processo + "] esta inseguro.");
+					System.out.println("Sem recursos suficientes pra suprir. Processo[" + processo + "] esta inseguro.");
 					break;
 				}
 				
@@ -229,15 +202,12 @@ public class DeadlockAlgorithm {
 					devolverRecurso(processo);
 					
 					//forçando a voltar a comparar desde o primeiro
-					//processo, em vez de seguir em frente.
-					//Necessario colocar -1 pois se colocar 0, o loop
-					//vai começar do 1.
 					processo = -1;
 					
-					mostrarMatrizDe("Rec. necessarios", recursosNecessarios);
-					mostrarMatrizDe("Rec. alocados", recursosAlocados);
-					mostrarVetorDe("Rec. disponiveis", recursosDisponiveis);
-					mostrarVetorDe("Rec. alocados", recursosExistentes);
+					mostrarMatrizDe("Recursos necessarios:", recursosNecessarios);
+					mostrarMatrizDe("Recursos alocados:", recursosAlocados);
+					mostrarVetorDe("Recursos. disponiveis:", recursosDisponiveis);
+					mostrarVetorDe("Recursos totais:", recursosExistentes);
 				}
 				else {
 					System.out.println("Tem recurso disponivel pra suprir!");
@@ -248,7 +218,7 @@ public class DeadlockAlgorithm {
 	
 	private void mostrarAndamentoDaComparacao(int processo, int recurso){
 		System.out.println();
-		System.out.println("=============================================");
+		System.out.println("..................................");
 		System.out.println("Analisando o processo " + processo + ", recurso " + recurso);
 		System.out.println("Analisando se recurso disponivel[" + recurso + "] < recurso necessario["+ recurso + "]...");
 	}
@@ -260,7 +230,7 @@ public class DeadlockAlgorithm {
 	}
 	
 	public void mostrarMatrizDe(String mensagem, int[][] matriz){
-		System.out.println("================");
+		System.out.println(".....................");
 		System.out.println(mensagem);
 		for(int processo = 0; processo < matriz.length; processo++){
 			for(int recurso = 0; recurso < matriz[0].length; recurso++){
@@ -281,16 +251,15 @@ public class DeadlockAlgorithm {
 		System.out.println();
 	}
 	
-	//TODO
 	public void realizarAnalise(){
 		
 		somatoriaRecursosAlocados = calcularRecursosEmUso(recursosAlocados);
 		recursosDisponiveis = calcularRecursosDisponiveis(recursosExistentes, somatoriaRecursosAlocados);
 		
-		mostrarMatrizDe("Rec. necessarios", recursosNecessarios);
-		mostrarMatrizDe("Rec. alocados", recursosAlocados);
-		mostrarVetorDe("Rec. disponiveis", recursosDisponiveis);
-		mostrarVetorDe("Rec. alocados", recursosExistentes);
+		mostrarMatrizDe("Recursos necessarios:", recursosNecessarios);
+		mostrarMatrizDe("Recursos alocados:", recursosAlocados);
+		mostrarVetorDe("Recursos disponiveis:", recursosDisponiveis);
+		mostrarVetorDe("Recursos totais:", recursosExistentes);
 		
 		if(!recursosSuficientes()){
 			System.out.println("Nao ha recursos existentes suficientes para suprir o (total de recursos alocados + total de recursos necessários), impossivel prosseguir.");
