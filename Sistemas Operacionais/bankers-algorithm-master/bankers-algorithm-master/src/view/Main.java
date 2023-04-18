@@ -7,29 +7,7 @@ import controller.DeadlockAlgorithm;
 public class Main {
 	
 	
-	public static void main(String[] args) {
-		
-		int qtdProcessos = 5;
-		int qtdRecursos = 4;
-		
-		int[][] recursosAlocados = {
-									{3, 0, 1, 1},
-									{0, 1, 0, 0},
-									{1, 1, 1, 0},
-									{1, 1, 0, 1},
-									{0, 0, 0, 0},
-												};
-
-		int[][] recursosNecessarios = {
-										{1, 1, 0, 0},
-										{0, 1, 1, 2},
-										{3, 1, 0, 0},
-										{0, 0, 1, 0},
-										{2, 1, 1, 0}
-													};
-
-		int[] recursosExistentes = {6, 3, 4, 2};
-		
+	public static void main(String[] args) {		
 		int qtdProcessos1 = 5;
 		int qtdRecursos1 = 6;
 		
@@ -51,9 +29,6 @@ public class Main {
 
 		int[] recursosExistentes1 = {6, 5, 7, 5, 4, 3};
 		
-		//DeadlockAlgorithm deadlock = new DeadlockAlgorithm(qtdProcessos, qtdRecursos, recursosAlocados, recursosNecessarios, recursosExistentes);
-		//deadlock.realizarAnalise();
-		
 		DeadlockAlgorithm deadlock1 = new DeadlockAlgorithm(qtdProcessos1, qtdRecursos1, recursosAlocados1, recursosNecessarios1, recursosExistentes1);
 		deadlock1.realizarAnalise();
 		
@@ -71,10 +46,11 @@ public class Main {
 		            
        			System.out.println("\nNovo processo adicionado!");
 		            
+       				//preenchendo novo processos com numeros aleatorios de recursos necessarios
 		            for (int x = 0; x < qtdRecursos1 -2; x++) {
 		            	int posCol = random.nextInt(2);
-		            	recursosAlocados[posCol][x] =  random.nextInt(3);
-		            	recursosNecessarios[posCol][x] =  random.nextInt(3);
+		            	recursosAlocados1[posCol][x] =  random.nextInt(3);
+		            	recursosNecessarios1[posCol][x] =  random.nextInt(3);
 		            }
 		            
 		            novosProcessos++;
