@@ -13,9 +13,15 @@ from selenium.webdriver.common.keys import Keys
 df = pd.read_csv('export.csv',sep=',')
 
 for index, row in df.iterrows():
-    codeSplit = row["Date"].split('3523')[1]
-    codeFinal = '3523' + codeSplit[0:40]
+    # IOS
+    # codeSplit = row["Data"].split('3523')[1]
+    # codeFinal = '3523' + codeSplit[0:40]
     # print(codeFinal)
+
+    # Android
+    codeSplit = row["text"].split('3523')[1]
+    codeFinal = '3523' + codeSplit[0:40]
+    print(codeFinal)
 
     # click input code
     pyautogui.click(580,687,duration=1)
@@ -24,9 +30,9 @@ for index, row in df.iterrows():
     pyautogui.write(codeFinal)
 
     # click fora
-    pyautogui.click(861,663,duration=1)
+    pyautogui.click(861,663,duration=0.5)
 
     # click enviar
     pyautogui.click(873,764,duration=1)
-    pyautogui.click(868,781,duration=1)
+    pyautogui.click(868,781,duration=0.5)
 
