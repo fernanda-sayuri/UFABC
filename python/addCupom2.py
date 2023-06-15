@@ -14,14 +14,14 @@ df = pd.read_csv('export.csv',sep=',')
 
 for index, row in df.iterrows():
     # IOS
-    codeSplit = row["Data"].split('3523')[1]
-    codeFinal = '3523' + codeSplit[0:40]
-    print(codeFinal)
-
-    # Android
-    # codeSplit = row["text"].split('3523')[1]
+    # codeSplit = row["Data"].split('3523')[1]
     # codeFinal = '3523' + codeSplit[0:40]
     # print(codeFinal)
+
+    # Android
+    codeSplit = row["text"].split('3523')[1]
+    codeFinal = '3523' + codeSplit[0:40]
+    print(codeFinal)
 
     # click input code
     pyautogui.click(580,687,duration=1)
