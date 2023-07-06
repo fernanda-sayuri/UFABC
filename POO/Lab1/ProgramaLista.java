@@ -22,6 +22,12 @@ public class ProgramaLista {
 
       int numLista = leitor.nextInt();
       int[] vetor = new int[numLista];
-    }
+
+      String strVet = leitor.next();
+      String[] textoSeparado = strVet.split(" ");
+      for (int i = 0; i < textoSeparado.length; i++) {
+          System.out.println(textoSeparado[i]);
+        }
+      }
     
 }
