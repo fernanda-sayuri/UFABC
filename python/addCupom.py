@@ -7,7 +7,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 # digitar teclado na web
 from selenium.webdriver.common.keys import Keys
-
+//
 df = pd.read_csv('export.csv',sep=',')
 
 for index, row in df.iterrows():
