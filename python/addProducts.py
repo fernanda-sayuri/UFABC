@@ -1,123 +1,81 @@
+# ler aquivo excel
+import pandas as pd
 import pyautogui
 from time import sleep
 
-with open('text.txt', 'r') as arquivo:
-    for linha in arquivo:
-        movieImage = linha.split(',')[0]
-        movieName = linha.split(',')[1]
-        # movieGender = linha.split(',')[5]The Game
-        movieDescription = linha.split(',')[6]
-        moviePrice = linha.split(',')[7]
+# O navegador
+from selenium import webdriver 
+# achar os elementos
+from selenium.webdriver.common.by import By
+# digitar teclado na web
+from selenium.webdriver.common.keys import Keys
 
-        # pyautogui.click(322,78,duration=2)
-        # pyautogui.write(movieImage)
+df = pd.read_csv('export.csv',sep=',')
 
-        # click +
-        pyautogui.click(1682,293,duration=1)
+index=0
+ 
+for index, row in df.iterrows():
+    # IOS
+    # codeSplit = row["Data"].split('3523')[1]
+    # codeFinal = '3523' + codeSplit[0:40]
+    # print(codeFinal)
+   
 
-        # click virtual
-        pyautogui.click(1483,437,duration=1)
+    index=index+1
+    # Android35230917604918000142590006584111334539511985
+    codeSplit = row["text"].split('3523')[1]
+    codeFinal = '3523' + codeSplit[0:40]
+    print(codeFinal)
+    # print(len(df))
 
-        # click name new product
-        sleep(3)
-        pyautogui.click(616,338,duration=1)
-        pyautogui.write(movieName)
+    # chave de acesso
+    pyautogui.click(538,702,duration=1)
+    pyautogui.write(codeFinal)
+    # chave de acesso
+    pyautogui.click(641,724,duration=1)
+    pyautogui.write(codeFinal)
+    # salvar nota
+    pyautogui.click(861,780,duration=1)
+    pyautogui.click(868,807,duration=1)
 
-        # click catalog
-        pyautogui.click(880,448,duration=1)
-        # click Guest 
-        pyautogui.click(734,535,duration=1)
-        # click submit 
-        pyautogui.click(1353,671,duration=1)
-        sleep(5)
 
-        # click description 
-        pyautogui.click(285,749,duration=2)
-        pyautogui.write(movieDescription)
-        # click Publish
-        pyautogui.click(1592,230,duration=1)
-        sleep(3)
+    if(index%30 == 0):
+        # Entidades
+        pyautogui.click(341,259,duration=0.5)
 
-        # click virtual tab 
-        pyautogui.click(320,312,duration=1)
-        sleep(5)
+        # cadastramento de cupons
+        pyautogui.click(386,287,duration=0.5)
 
-        # click insert URL
-        pyautogui.click(1098,499,duration=2)
-        sleep(5)
-        pyautogui.write(movieImage)
-        
-        # click down screen
-        pyautogui.click(1912,989,duration=1)
-        pyautogui.click(1912,989,duration=1)
-        # click Save Virtual
-        pyautogui.click(229,1017,duration=1)
-        sleep(5)
+        #prosseguir
+        pyautogui.click(856,500,duration=0.5)
 
-        # click SKU tab
-        pyautogui.click(533,310,duration=1)
-        sleep(5)
-        # click ...
-        pyautogui.click(1687,584,duration=1)
-        # click edit
-        pyautogui.click(1512,634,duration=1)
-        sleep(3)
-        # click rollbar and scroll down
-        pyautogui.click(1912,596,duration=1)
-        pyautogui.scroll(-100)
-        
-        # click price
-        pyautogui.click(785,892,duration=1)
-        pyautogui.press('backspace')
-        pyautogui.press('backspace')
-        pyautogui.press('backspace')
-        pyautogui.press('backspace')
-        pyautogui.write(moviePrice)
-        # click publish price
-        pyautogui.click(1790,976,duration=1)
-        sleep(1)
-        # click publish price
-        pyautogui.click(1790,976,duration=1)
-        # click close price
-        pyautogui.click(1864,234,duration=1)
+        #click entendida label
+        pyautogui.click(458,490,duration=0.5)
+        #click entendida label
+        pyautogui.click(458,526,duration=0.5)
+        #entidades
+        pyautogui.click(439,354,duration=0.5)
+        #nova nota
+        pyautogui.click(876,609,duration=0.5)
+        print('oiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii')
 
-        # click Media tab
-        pyautogui.click(592,309,duration=2)
-        sleep(5)
 
-        # click +
-        pyautogui.click(1674,477,duration=2)
-        sleep(5)
+        # # chave de acesso
+        # pyautogui.click(538,702,duration=0.5)
+        # # salvar nota
+        # pyautogui.click(861,780,duration=0.5)
 
-        # click Select file
-        pyautogui.click(1384,383,duration=2)
-        sleep(5)
 
-        # click upload file
-        pyautogui.click(1426,521,duration=2)
-        sleep(5)
+        #  # click input code
+        # pyautogui.click(580,580,duration=1)
+        # # pyautogui.write(codeFinal)
 
-        # click insert url file
-        pyautogui.click(1426,521,duration=2)
-        pyautogui.write(movieImage)
-        sleep(5)
+        # pyautogui.click(620,697,duration=0.5)
+        # pyautogui.write(codeFinal)
 
-        # click open file
-        pyautogui.click(1205,547,duration=2)
-        sleep(5)
+        # # click fora
+        # pyautogui.click(861,663,duration=0.5)
 
-        # click add
-        pyautogui.click(1768,379,duration=2)
-        sleep(6)
-
-        # click publish
-        pyautogui.click(1807,986,duration=2)
-
-        # click x
-        pyautogui.click(1844,235,duration=2)
-
-        # click publish
-        pyautogui.click(1600,245,duration=2)
-
-        # click back Products
-        pyautogui.click(212,170,duration=2)
+        # # click enviar
+        # pyautogui.click(873,764,duration=0.5)35230917604918000142590006584111335887347468
+        # pyautogui.click(868,781,duration=0.5)
